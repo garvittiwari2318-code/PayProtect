@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayProtect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar"> 
+    <div class="nav-left">
+      <a class="brand" href="#" data-tab="scan">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L4 5v6c0 5 3.4 8.7 8 9.9 4.6-1.2 8-4.9 8-9.9V5l-8-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M9 12l2 2 4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-name">PayProtect</span>
+      </a>
+      <nav class="nav-menu">
+        <a href="#" class="nav-link active" data-tab="scan">Scan</a>
+        <a href="#" class="nav-link" data-tab="dashboard">Dashboard</a>
+        <a href="#" class="nav-link" data-tab="awareness">Awareness</a>
+        <a href="#" class="nav-link" data-tab="about">About</a>
+      </nav>
+    </div>
+
+    <div class="nav-right" id="nav-right">
+      <button class="btn-ghost" id="btn-login">Log in</button>
+      <button class="btn-primary" id="btn-signup">Sign up</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ===== SCAN TAB ===== -->
+    <section class="tab-panel active" id="tab-scan">
+      <div class="console">
+
+        <section class="panel panel-input">
+          <h2 class="panel-title">Check a UPI ID</h2>
+          <p class="panel-sub">Fill in what you see at checkout before you pay.</p>
+
+          <form id="scan-form" class="scan-form">
+            <div class="field">
+              <label for="upi-id">UPI ID</label>
+              <input type="text" id="upi-id" name="upiId" placeholder="example@okbank" autocomplete="off" required>
+            </div>
+
+            <div class="field">
+              <label for="payee-name">Payee name</label>
+              <input type="text" id="payee-name" name="payeeName" placeholder="Name shown at checkout" autocomplete="off" required>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="amount">Amount (₹)</label>
+                <input type="number" id="amount" name="amount" placeholder="0" min="0" autocomplete="off" required>
+              </div>
+              <div class="field">
+                <label for="reason">Reason</label>
+                <select id="reason" name="reason" required>
+                  <option value="" disabled selected>Select one</option>
+                  <option value="friend_family">Friend / Family</option>
+                  <option value="online_purchase">Online purchase</option>
+                  <option value="unknown_seller">Unknown seller / marketplace</option>
+                  <option value="refund">Claimed refund</option>
+                  <option value="investment">Investment / trading offer</option>
+                  <option value="prize">Prize / cashback claim</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="scan-btn">Check this payment</button>
+          </form>
+        </section>
+
+        <section class="panel panel-result">
+          <h2 class="panel-title">Risk result</h2>
+
+          <div class="gauge-wrap" id="gauge-wrap">
+            <svg class="gauge" viewBox="0 0 220 220">
+              <circle class="gauge-track" cx="110" cy="110" r="92"></circle>
+              <circle class="gauge-fill" cx="110" cy="110" r="92" id="gauge-fill"></circle>
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-score" id="gauge-score">—</div>
+              <div class="gauge-unit">out of 100</div>
+            </div>
+          </div>
+
+          <div class="verdict" id="verdict">
+            <div class="verdict-label" id="verdict-label">No check run yet</div>
+            <div class="verdict-desc" id="verdict-desc">Fill in the form and check a payment to see a result here.</div>
+          </div>
+
+          <ul class="signal-list" id="signal-list"></ul>
+        </section>
+
+      </div>
+    </section>
+
+    <!-- ===== DASHBOARD TAB ===== -->
+    <section class="tab-panel" id="tab-dashboard">
+      <h2 class="section-title">Your activity</h2>
+      <p class="section-sub">Everything below is stored only in this browser — nothing is sent anywhere.</p>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total checks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value stat-danger" id="stat-flagged">0</div>
+          <div class="stat-label">Flagged high risk</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-amount">₹0</div>
+          <div class="stat-label">Total amount screened</div>
+        </div>
+      </div>
+
+      <h3 class="panel-title" style="margin-top: 32px;">Recent checks</h3>
+      <div class="history-list" id="history-list">
+        <p class="history-empty" id="history-empty">Nothing checked yet — your recent scans will show up here.</p>
+      </div>
+    </section>
+
+    <!-- ===== AWARENESS TAB ===== -->
+    <section class="tab-panel" id="tab-awareness">
+      <h2 class="section-title">Fraud awareness tips</h2>
+      <p class="section-sub">Common patterns behind UPI scams — worth knowing even before you run a check.</p>
+
+      <div class="tip-list">
+        <div class="tip-card">
+          <h3>You never pay to receive money</h3>
+          <p>Refunds, cashback, prizes, and lottery winnings are credited to you. Any request to pay first "to unlock" a refund or prize is a scam.</p>
+        </div>
+        <div class="tip-card">
+          <h3>Screen sharing apps are a red flag</h3>
+          <p>No legitimate bank, UPI app, or support agent will ever ask you to install a remote screen-sharing app during a call.</p>
+        </div>
+        <div class="tip-card">
+          <h3>Collect requests can drain your account</h3>
+          <p>Approving a "collect request" sends money out of your account — it does not bring money in. Read the amount and payee carefully before approving anything.</p>
+        </div>
+        <div class="tip-card">
+          <h3>Urgency is a manipulation tactic</h3>
+          <p>Scammers create time pressure ("offer expires in 5 minutes") to stop you from verifying. A legitimate transaction can wait a few minutes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT TAB ===== -->
+    <section class="tab-panel" id="tab-about">
+      <h2 class="section-title">About PayProtect</h2>
+      <p class="about-text">
+        PayProtect is a frontend prototype that helps you sanity-check a payment before you send it. It runs a set of
+        rule-based checks against the UPI ID, payee name, amount, and stated reason for payment, entirely inside your
+        browser — there's no backend, no live fraud database, and no data ever leaves your device.
+      </p>
+      <p class="about-text">
+        It's built as an awareness tool, not a certified fraud-detection system. Always verify a payee through your
+        bank or UPI app before making a real payment.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    <p>PayProtect runs a simulated, rule-based check entirely in your browser. Nothing is sent anywhere. It's an awareness tool, not a verified fraud-detection service — always confirm payee identity through your bank or UPI app before paying.</p>
+  </footer>
+
+  <!-- ===== AUTH MODAL (UI mockup only — no real backend/auth) ===== -->
+  <div class="modal-overlay hidden" id="auth-overlay">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <div class="modal-tabs">
+        <button class="modal-tab active" data-mode="login">Log in</button>
+        <button class="modal-tab" data-mode="signup">Sign up</button>
+      </div>
+
+      <form id="auth-form" class="auth-form">
+        <div class="field" id="field-name" style="display:none;">
+          <label for="auth-name">Name</label>
+          <input type="text" id="auth-name" placeholder="Your name" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="auth-email">Email</label>
+          <input type="email" id="auth-email" placeholder="you@example.com" required>
+        </div>
+        <div class="field">
+          <label for="auth-password">Password</label>
+          <input type="password" id="auth-password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-primary auth-submit" id="auth-submit">Log in</button>
+        <p class="auth-note">Demo only — this is a UI mockup. No account data leaves your browser.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== TRANSACTION DETAIL CARD (click a row in Recent checks) ===== -->
+  <div class="modal-overlay hidden" id="detail-overlay">
+    <div class="modal modal-wide">
+      <button class="modal-close" id="detail-close">&times;</button>
+      <h3 class="detail-title">Transaction details</h3>
+      <div id="detail-body"><!-- populated by JS --></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
